@@ -178,26 +178,14 @@ def create_npy_skill(
         encoding="utf-8",
     )
 
-    # 创建符号链接到全局 skills 目录，让 Claude Code 能识别
+    # 创建符号链接到全局 skills 目录，让 Claude Code 和 OpenClaw 能识别
     if symlink_to_global:
-        global_skills_dir = Path.home() / ".claude" / "skills"
-        global_skill_link = global_skills_dir / slug
-
-        # 如果链接已存在，先删除
-        if global_skill_link.exists() or global_skill_link.is_symlink():
-            if global_skill_link.is_symlink():
-                global_skill_link.unlink()
-            else:
-                shutil.rmtree(global_skill_link)
-
-        # 创建符号链接
-        try:
-            global_skill_link.symlink_to(skill_dir)
-            meta["_global_link"] = str(global_skill_link)
-        except OSError as e:
-            # 可能没有权限或跨文件系统，忽略错误
-            print(f"提示：无法创建全局链接：{e}", file=__import__("sys").stderr)
-            print(f"请在项目目录下使用，或手动复制 skill 到全局目录", file=__import__("sys").stderr)
+        link_result = create_global_skill_link(skill_dir, slug)
+        if link_result["links"]:
+            meta["_global_links"] = link_result["links"]
+        if link_result["errors"]:
+            for err in link_result["errors"]:
+                print(f"提示：{err}", file=__import__("sys").stderr)
 
     return skill_dir
 
@@ -311,12 +299,12 @@ def update_npy_skill(
     return new_version
 
 
-def delete_npy_skill(skill_dir: Path, cleanup_global_link: bool = True) -> bool:
+def delete_npy_skill(skill_dir: Path, cleanup_global_links: bool = True) -> bool:
     """删除 npy Skill
 
     Args:
         skill_dir: skill 目录路径
-        cleanup_global_link: 是否同时删除全局链接
+        cleanup_global_links: 是否同时删除全局链接
     """
     if not skill_dir.exists():
         return False
@@ -334,17 +322,11 @@ def delete_npy_skill(skill_dir: Path, cleanup_global_link: bool = True) -> bool:
     # 删除目录
     shutil.rmtree(skill_dir)
 
-    # 删除全局链接
-    if cleanup_global_link:
-        global_skill_link = Path.home() / ".claude" / "skills" / slug
-        if global_skill_link.is_symlink() or global_skill_link.exists():
-            try:
-                if global_skill_link.is_symlink():
-                    global_skill_link.unlink()
-                else:
-                    shutil.rmtree(global_skill_link)
-            except OSError:
-                pass
+    # 删除全局链接（Claude Code 和 OpenClaw）
+    if cleanup_global_links:
+        removed = remove_global_skill_link(slug)
+        if removed:
+            print(f"已清理全局链接：{', '.join(removed)}")
 
     return True
 
@@ -416,6 +398,107 @@ def get_skills_base_dir() -> Path:
 
     # 最后回退到当前目录
     return Path("./partners")
+
+
+def get_global_skills_dirs() -> list[Path]:
+    """获取全局 skills 目录列表（支持 Claude Code 和 OpenClaw）
+
+    Returns:
+        目录列表，按优先级排序
+    """
+    dirs = []
+
+    # Claude Code 全局目录
+    claude_global = Path.home() / ".claude" / "skills"
+    if claude_global.exists():
+        dirs.append(claude_global)
+
+    # OpenClaw 目录
+    openclaw_global = Path.home() / ".openclaw" / "workspace" / "skills"
+    if openclaw_global.exists():
+        dirs.append(openclaw_global)
+
+    # 如果都不存在，返回默认的 Claude Code 目录
+    if not dirs:
+        dirs.append(claude_global)
+
+    return dirs
+
+
+def create_global_skill_link(skill_dir: Path, slug: str) -> dict:
+    """在全局 skills 目录创建符号链接
+
+    Args:
+        skill_dir: skill 目录路径
+        slug: skill 标识
+
+    Returns:
+        创建的链接信息
+    """
+    import os
+
+    links_created = []
+    errors = []
+
+    for global_dir in get_global_skills_dirs():
+        global_link = global_dir / slug
+
+        # 确保目录存在
+        global_dir.mkdir(parents=True, exist_ok=True)
+
+        # 如果链接已存在，先删除
+        if global_link.exists() or global_link.is_symlink():
+            try:
+                if global_link.is_symlink():
+                    global_link.unlink()
+                else:
+                    shutil.rmtree(global_link)
+            except OSError as e:
+                errors.append(f"无法删除已存在的 {global_link}: {e}")
+                continue
+
+        # 创建符号链接
+        try:
+            global_link.symlink_to(skill_dir)
+            links_created.append(str(global_link))
+        except OSError as e:
+            # 可能跨文件系统，尝试复制
+            try:
+                shutil.copytree(skill_dir, global_link)
+                links_created.append(f"{global_link} (副本)")
+            except OSError as e2:
+                errors.append(f"无法创建链接或副本 {global_link}: {e2}")
+
+    return {
+        "links": links_created,
+        "errors": errors,
+    }
+
+
+def remove_global_skill_link(slug: str) -> list[str]:
+    """删除全局 skills 目录中的符号链接
+
+    Args:
+        slug: skill 标识
+
+    Returns:
+        删除的链接列表
+    """
+    removed = []
+
+    for global_dir in get_global_skills_dirs():
+        global_link = global_dir / slug
+        if global_link.is_symlink() or global_link.exists():
+            try:
+                if global_link.is_symlink():
+                    global_link.unlink()
+                else:
+                    shutil.rmtree(global_link)
+                removed.append(str(global_link))
+            except OSError:
+                pass
+
+    return removed
 
 
 def get_npy_skill_dir() -> Path:
