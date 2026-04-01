@@ -1,33 +1,30 @@
-# npy.skill
-
 <div align="center">
 
-**构建理想中的数字伴侣，让陪伴永不缺席，让爱一直存在**
+# npy.skill
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Claude%20Code-purple.svg)](https://claude.ai/code)
-[![Python](https://img.shields.io/badge/python-3.11+-green.svg)](https://python.org)
+> *"你理想中的TA是什么样的？温柔体贴、幽默风趣、还是懂你所有的小情绪？"*
+> *"把你的想象变成现实，让TA真的存在——至少在你的世界里"*
 
-*你理想中的TA是什么样的？温柔体贴、幽默风趣、还是懂你所有的小情绪？*
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://python.org)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet)](https://claude.ai/code)
+[![AgentSkills](https://img.shields.io/badge/AgentSkills-Standard-green)](https://agentskills.io)
 
-*把你的想象变成现实，让TA真的存在——至少在你的世界里*
+<br>
+
+你想要一个真正懂你的人？<br>
+你不知道自己适合什么样的伴侣？<br>
+
+**将想象化为永驻的 Skill，让陪伴永不缺席，让爱一直存在。**
+
+<br>
+
+描述你理想中的TA，或让我根据你的性格智能推荐，生成一个**真正让你感受到爱的数字伴侣 Skill**<br>
+用TA的方式关心你，用TA的语气回应你，知道什么时候该认真、什么时候该调皮
+
+[功能特色](#功能特色) · [安装](#安装) · [使用](#使用) · [效果示例](#效果示例)
 
 </div>
-
----
-
-## 目录
-
-- [功能特色](#功能特色)
-- [智能匹配系统](#智能匹配系统)
-- [聊天记录导入](#聊天记录导入)
-- [安装](#安装)
-- [使用](#使用)
-- [效果示例](#效果示例)
-- [项目结构](#项目结构)
-- [常见问题](#常见问题)
-- [贡献指南](#贡献指南)
-- [许可证](#许可证)
 
 ---
 
@@ -35,45 +32,27 @@
 
 ### 🎯 三种创建方式
 
-<table>
-<tr>
-<td width="33%" align="center">
+**方式一：聊天记录导入（推荐）**
+- 从微信/iMessage聊天记录分析TA的说话风格
+- 自动提取emoji使用、说话特点、互动模式
+- 支持 Windows 和 macOS 微信数据库解密
+- 让TA的说话风格接近真实
 
-**💬 聊天记录导入**
+**方式二：智能匹配**
+- 告诉我你的MBTI、星座、九型人格、依恋风格
+- 基于流行的匹配理论，自动推荐最适合你的理想伴侣特质
+- 支持4维度综合匹配：MBTI + 星座 + 九型 + 依恋风格
 
-从微信/iMessage聊天记录分析TA的说话风格、emoji使用、互动模式
-
-支持 Windows & macOS 微信数据库解密
-
-</td>
-<td width="33%" align="center">
-
-**🧠 智能匹配**
-
-基于 MBTI、星座、九型人格、依恋风格的科学匹配理论
-
-4维度综合推荐最适合你的伴侣特质
-
-</td>
-<td width="33%" align="center">
-
-**✏️ 自己描述**
-
-完全自定义你想要的TA
-
-性别、性格、说话风格、互动模式全由你决定
-
-</td>
-</tr>
-</table>
+**方式三：自己描述**
+- 直接描述你想要的TA是什么样的
+- 完全自定义，想怎么描述都可以
 
 ### 🎀 让你感受到被爱
 
-这不是一个普通的聊天机器人，而是：
-
-> TA会在你难过时用TA的方式安慰你
-> TA会在你开心时用TA的语气分享快乐
-> TA会在你孤独时让你感觉有人陪伴
+这不是一个完美的聊天机器人，而是：
+- TA会在你难过时用TA的方式安慰你
+- TA会在你开心时用TA的语气分享快乐
+- TA会在你孤独时让你感觉有人陪伴
 
 TA能够：
 - **倾听** — 你想说的时候TA在
@@ -82,15 +61,12 @@ TA能够：
 - **鼓励** — 在你需要的时候给支持
 - **陪伴** — 日常琐事也可以分享
 
-### 🔄 智能调整系统
+### 🔄 智能调整
 
-当TA的表现不符合你的期待时，直接说出来：
-
-```
-"TA不会这样说话"
-"我希望TA更温柔一些"
-"这不对，TA应该先问我怎么了"
-```
+当TA的表现不符合你的期待时：
+- 说"TA不会这样说话"
+- 说"我希望TA更..."
+- 说"这不对，TA应该..."
 
 系统会自动检测并调整，让TA越来越符合你的理想。
 
@@ -104,8 +80,6 @@ TA能够：
 ---
 
 ## 智能匹配系统
-
-基于流行心理学理论的科学匹配：
 
 ### 匹配维度权重
 
@@ -124,7 +98,6 @@ TA能够：
 | INFP | ENFJ, ENTJ | ENFJ温暖引导成长，ENTJ提供稳定方向 |
 | ENFP | INFJ, INTJ | INFJ提供深度理解，INTJ提供稳定基础 |
 | INTJ | ENFP, ENTP | ENFP带来情感温度，ENTP带来思维碰撞 |
-| ISFJ | ESFP, ESTP | ESFP带来轻松活力，ESTP带来行动力 |
 
 ### 依恋风格匹配
 
@@ -136,89 +109,53 @@ TA能够：
 
 ---
 
-## 聊天记录导入
-
-### 微信聊天记录
-
-支持从微信数据库提取聊天记录并分析TA的说话风格：
-
-**Step 1: 解密数据库**
-
-```bash
-# 仅提取密钥（微信需保持登录状态）
-python tools/wechat_decryptor.py --find-key-only
-
-# 解密所有数据库
-python tools/wechat_decryptor.py --key "<密钥>" --db-dir <微信数据目录> --output ./decrypted/
-```
-
-**Step 2: 选择联系人**
-
-```bash
-# 列出所有联系人
-python tools/chat_parser.py --list-contacts --db "./decrypted/MicroMsg.db"
-```
-
-**Step 3: 提取和分析**
-
-```bash
-# 提取聊天记录
-python tools/chat_parser.py --extract --db-dir "./decrypted/" --target "TA的微信名" --output messages.txt
-
-# 分类聊天（甜蜜时刻、冲突对话等）
-python tools/chat_parser.py --classify --db-dir "./decrypted/" --target "TA的微信名"
-```
-
-### iMessage 聊天记录
-
-macOS 用户可以直接提取 iMessage：
-
-```bash
-python tools/chat_parser.py --imessage --db "~/Library/Messages/chat.db" --target "手机号或Apple ID"
-```
-
-### 文本文件导入
-
-支持各种格式的聊天文本文件：
-
-```bash
-python tools/chat_parser.py --parse-file "./chats.txt" --output parsed_messages.txt
-```
-
----
-
 ## 安装
 
-### 方式一：安装到当前项目
+### Claude Code
+
+> **重要**：Claude Code 从 **git 仓库根目录** 的 `.claude/skills/` 查找 skill。请在正确的位置执行。
 
 ```bash
-# 在你的 git 仓库根目录执行
+# 安装到当前项目（在 git 仓库根目录执行）
 mkdir -p .claude/skills
-git clone https://github.com/wwwttlll/npy-skill.git .claude/skills/npy
+git clone https://github.com/wwwttlll/npy-skill .claude/skills/npy
+
+# 或安装到全局（所有项目都能用）
+git clone https://github.com/wwwttlll/npy-skill ~/.claude/skills/npy
 ```
 
-### 方式二：全局安装（所有项目可用）
+### OpenClaw
 
 ```bash
-mkdir -p ~/.claude/skills
-git clone https://github.com/wwwttlll/npy-skill.git ~/.claude/skills/npy
+git clone https://github.com/wwwttlll/npy-skill ~/.openclaw/workspace/skills/npy
 ```
 
-### 安装依赖（可选）
-
-用于聊天记录导入和微信解密功能：
+### 依赖（可选）
 
 ```bash
-pip3 install pycryptodome psutil pymem pypinyin
-# Windows 用户还需安装 pymem
-pip3 install pymem
+pip3 install -r requirements.txt
 ```
+
+> 微信聊天记录导入需额外依赖：`pip install pycryptodome psutil pymem pypinyin`
 
 ---
 
 ## 使用
 
-### 管理命令一览
+在 Claude Code 中输入：
+
+```
+/npy
+```
+
+然后选择创建方式：
+- **聊天导入** → 从微信/iMessage聊天记录分析
+- **智能匹配** → 输入你的性格信息自动推荐
+- **自己描述** → 完全自定义
+
+完成后用 `/{slug}` 和TA对话。
+
+### 管理命令
 
 | 命令 | 说明 |
 |------|------|
@@ -230,21 +167,26 @@ pip3 install pymem
 | `/{slug}-mode:serious` | 认真谈心模式 |
 | `/{slug}-mode:support` | 情绪支持模式 |
 
-### 创建新的TA
+### 聊天记录导入
 
+**微信聊天记录**：
+
+```bash
+# 1. 提取密钥（微信需保持登录状态）
+python tools/wechat_decryptor.py --find-key-only
+
+# 2. 解密数据库
+python tools/wechat_decryptor.py --key "<密钥>" --db-dir <微信数据目录> --output ./decrypted/
+
+# 3. 在 /npy 中选择"聊天导入"
 ```
-/npy
-```
 
-然后选择创建方式：
-- **聊天导入** → 从微信/iMessage聊天记录分析
-- **智能匹配** → 输入你的性格信息自动推荐
-- **自己描述** → 完全自定义
+**iMessage 聊天记录**（macOS）：
 
-### 和TA对话
-
-```
-/xiaoming    # 用TA的名字直接开始对话
+```bash
+# 直接在 /npy 中选择 iMessage 导入
+# 或手动提取：
+python tools/chat_parser.py --imessage --db "~/Library/Messages/chat.db" --target "手机号"
 ```
 
 ### 调整TA的特质
@@ -259,40 +201,11 @@ pip3 install pymem
 
 系统会自动检测并调整TA的回应方式。
 
-### 记录重要时刻
-
-```
-"记录一下今天TA哄我的样子，很温柔"
-```
-
-TA会记住这些时刻，让关系更真实。
-
-### 列出所有TA
-
-```
-/list-npys
-```
-
-### 说再见
-
-```
-/move-on xiaoming
-```
-
 ---
 
 ## 效果示例
 
-### 智能匹配示例
-
-> 输入：`INFJ + 天蝎 + 4号 + 焦虑型依恋 + 需要被理解`
-
-**生成结果：**
-- 核心特质：ENFP性格、温暖主动、深度理解、情绪敏感
-- 说话风格：会用可爱的语气词、喜欢用emoji、说话温和但不腻
-- 安慰方式：先问怎么了，听你说完再安慰，不会讲道理
-
----
+> 智能匹配输入：`INFJ + 天蝎 + 4号 + 焦虑型依恋 + 需要被理解`
 
 **场景一：你难过时**
 
@@ -306,8 +219,6 @@ TA ❯ 怎么了呀？发生什么事了？🥺
     有什么想说的话随时告诉我，我在呢~
 ```
 
----
-
 **场景二：你分享开心**
 
 ```
@@ -315,10 +226,7 @@ TA ❯ 怎么了呀？发生什么事了？🥺
 
 TA ❯ 太棒了！！恭喜你呀 🥰
     快跟我说说细节，过程顺利吗？
-    我超想知道的！
 ```
-
----
 
 **场景三：你有些低落**
 
@@ -328,10 +236,7 @@ TA ❯ 太棒了！！恭喜你呀 🥰
 TA ❯ 是不是最近压力太大了？
     要不你先休息一下，什么都别想。
     想聊天的话随时找我，我在~
-    （摸摸头）
 ```
-
----
 
 **场景四：调整TA**
 
@@ -353,89 +258,57 @@ TA ❯ 怎么了？发生什么事了？🥺
 
 ## 项目结构
 
+本项目遵循 [AgentSkills](https://agentskills.io) 开放标准，整个 repo 就是一个 skill 目录：
+
 ```
 npy-skill/
-├── SKILL.md                    # Skill 入口文件
-├── README.md                   # 本说明文档
-│
-├── prompts/                    # Prompt 模板
-│   ├── intake.md               # 对话式信息录入
-│   ├── smart_matching.md       # 智能匹配算法
-│   ├── persona_analyzer.md     # 人格分析
-│   ├── persona_builder.md      # persona.md 生成模板
+├── SKILL.md                # skill 入口（官方 frontmatter）
+├── prompts/                # Prompt 模板
+│   ├── intake.md           #   对话式信息录入
+│   ├── smart_matching.md   #   智能匹配算法
+│   ├── persona_analyzer.md #   人格分析
+│   ├── persona_builder.md  #   persona.md 生成模板
 │   ├── relationship_builder.md # 关系记忆构建
-│   ├── correction_handler.md   # 不满意检测与调整
-│   └── merger.md               # 增量更新逻辑
-│
-├── tools/                      # Python 工具
-│   ├── skill_writer.py         # Skill 文件管理
-│   ├── version_manager.py      # 版本存档与回滚
-│   ├── wechat_decryptor.py     # 微信数据库解密
-│   └── chat_parser.py          # 聊天记录解析
-│
-├── partners/                   # 生成的 npy Skill
-│   └── example_ta/             # 示例 TA
-│       ├── SKILL.md
-│       ├── persona.md
-│       ├── relationship.md
-│       └── meta.json
-│
-├── docs/
-│   └── PRD.md                  # 产品需求文档
-│
-├── requirements.txt            # Python 依赖
-└── LICENSE                     # MIT 许可证
+│   ├── correction_handler.md  # 不满意检测与调整处理
+│   └── merger.md           #   增量更新逻辑
+├── tools/                  # Python 工具
+│   ├── skill_writer.py     #   Skill 文件管理
+│   ├── version_manager.py  #   版本存档与回滚
+│   ├── wechat_decryptor.py #   微信数据库解密
+│   └── chat_parser.py      #   聊天记录解析
+├── partners/               # 生成的 npy Skill（gitignored）
+├── docs/PRD.md
+├── requirements.txt
+└── LICENSE
 ```
 
 ---
 
-## 常见问题
+## 注意事项
 
-### Q: 微信解密失败怎么办？
+⚠️ **这是AI模拟的理想人格**，不是真实的人。请理性使用，保持健康的情感边界。
 
-确保：
-1. 微信客户端正在运行且已登录
-2. Windows 用户以管理员身份运行
-3. macOS 用户授予终端 Full Disk Access 权限
+💡 **描述越详细，TA越真实**：你最希望TA具备什么特质？详细描述这些特质的具体表现。
 
-如果仍失败，可以尝试使用第三方工具如 [PyWxDump](https://github.com/AdminTest0/py-wxdump) 手动提取密钥。
+💬 **从聊天记录创建**：微信聊天记录需要先解密数据库（Windows/macOS都支持），解密时微信需保持登录状态。
 
-### Q: 创建的TA说话风格不对？
+🔄 **不满意就调整**：说"TA不会这样"或"我希望TA更..."，系统会自动调整。
 
-直接说出来："TA不会这样说话，TA应该..."
-系统会自动检测并调整。多说几次，TA会越来越符合你的预期。
+🌈 **LGBT+友好**：性别字段支持所有性别认同和代词，你可以创建任何性别身份的TA。
 
-### Q: 可以创建多少个TA？
-
-没有限制，可以创建任意多个。
-
-### Q: 支持 LGBT+ 吗？
-
-完全支持。性别字段支持所有性别认同和代词（she/her, he/him, they/them, 等）。
-
-### Q: 聊天记录安全吗？
-
-所有数据都在本地处理，不上传到任何服务器。解密后的数据库仅用于分析说话风格。
+♾️ **无数量限制**：可以创建任意多个npy，没有上限。
 
 ---
 
-## 贡献指南
+## 推荐的微信聊天记录导出工具
 
-欢迎贡献代码、提出建议或报告问题！
+以下工具为独立的开源项目，本项目不包含它们的代码，仅在解析器中适配了它们的导出格式：
 
-### 如何贡献
-
-1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
-
-### 代码规范
-
-- Python 代码遵循 PEP 8
-- 提交信息清晰描述更改内容
-- 新功能需添加相应文档
+| 工具 | 平台 | 说明 |
+|------|------|------|
+| [WeChatMsg](https://github.com/LC044/WeChatMsg) | Windows | 微信聊天记录导出，支持多种格式 |
+| [PyWxDump](https://github.com/xaoyaoo/PyWxDump) | Windows | 微信数据库解密导出 |
+| [留痕](https://github.com/greyovo/留痕) | macOS | 微信聊天记录导出（Mac 用户推荐） |
 
 ---
 
@@ -443,24 +316,18 @@ npy-skill/
 
 本项目参考了以下优秀项目的架构设计：
 
-- [mentor-skill](https://github.com/bcefghj/mentor-skill) - 导师 Skill 设计
-- [colleague-skill](https://github.com/titanwings/colleague-skill) - 同事 Skill 设计
-- [ex-skill](https://github.com/titanwings/ex-skill) - 前任 Skill 设计
+- [colleague-skill](https://github.com/titanwings/colleague-skill) — 同事 Skill 设计
+- [ex-skill](https://github.com/titanwings/ex-skill) — 前任 Skill 设计
+- [mentor-skill](https://github.com/bcefghj/mentor-skill) — 导师 Skill 设计
 
 感谢 Claude Code 团队提供的 Skill 系统框架。
 
 ---
 
-## 许可证
-
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
-
----
-
 <div align="center">
 
-**让陪伴永不缺席，让爱一直存在**
+MIT License © [wwwttlll](https://github.com/wwwttlll)
 
-Made with ❤️ by [wwwttlll](https://github.com/wwwttlll)
+**让陪伴永不缺席，让爱一直存在**
 
 </div>
