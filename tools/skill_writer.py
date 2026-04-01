@@ -340,6 +340,9 @@ def list_npys(base_dir: Path) -> list:
     for skill_dir in sorted(base_dir.iterdir()):
         if not skill_dir.is_dir():
             continue
+        # 跳过 npy 本身（这是创建器）
+        if skill_dir.name == "npy":
+            continue
         meta_path = skill_dir / "meta.json"
         if not meta_path.exists():
             continue
@@ -364,40 +367,42 @@ def list_npys(base_dir: Path) -> list:
 def get_skills_base_dir() -> Path:
     """获取 skills 存放的基础目录
 
+    每个 TA 直接创建为独立的 skill，放在 .claude/skills/{slug}/ 目录
+
     优先级：
-    1. 如果在 .claude/skills/npy 目录下，使用该目录的 partners 子目录
-    2. 如果在项目根目录（有 .claude 文件夹），使用 .claude/skills/partners
-    3. 否则使用全局目录 ~/.claude/skills/partners
+    1. 如果在 .claude/skills/npy 目录下，使用父目录（.claude/skills/）
+    2. 如果在项目根目录（有 .claude 文件夹），使用 .claude/skills/
+    3. 否则使用全局目录 ~/.claude/skills/
     """
     import os
 
     # 检查环境变量
     skill_dir_env = os.environ.get("CLAUDE_SKILL_DIR", "")
     if skill_dir_env:
-        return Path(skill_dir_env) / "partners"
+        return Path(skill_dir_env).parent  # 返回 skills 目录，而不是 npy 目录
 
     current = Path.cwd()
 
     # 检查是否已经在 skill 目录中（.claude/skills/npy）
     if (current / "SKILL.md").exists() and current.name == "npy":
-        # 当前就是 npy skill 目录，partners 在这里
-        return current / "partners"
+        # 当前是 npy skill 目录，返回父目录（skills 目录）
+        return current.parent
 
     # 向上查找 .claude 目录
     for parent in [current] + list(current.parents):
         if (parent / ".claude" / "skills").exists():
             # 找到了项目的 .claude/skills 目录
-            return parent / ".claude" / "skills" / "partners"
+            return parent / ".claude" / "skills"
         if (parent / "SKILL.md").exists() and parent.name == "npy":
-            return parent / "partners"
+            return parent.parent
 
     # 默认使用全局目录
     global_skills = Path.home() / ".claude" / "skills"
     if global_skills.exists():
-        return global_skills / "partners"
+        return global_skills
 
-    # 最后回退到当前目录
-    return Path("./partners")
+    # 最后回退到当前目录的 .claude/skills
+    return current / ".claude" / "skills"
 
 
 def get_global_skills_dirs() -> list[Path]:
@@ -552,19 +557,25 @@ def main() -> None:
         import os
         skill_dir_env = os.environ.get("CLAUDE_SKILL_DIR", "")
         if skill_dir_env:
-            base_dir = Path(skill_dir_env) / "partners"
+            # CLAUDE_SKILL_DIR 指向的是 npy skill 目录
+            base_dir = Path(skill_dir_env)
         else:
-            # 尝试检测当前是否在 skill 目录中
+            # 尝试检测当前是否在项目目录中
             current = Path.cwd()
+
             # 检查是否在 .claude/skills/npy 目录
             if (current.name == "npy" and (current.parent.name == "skills")):
-                base_dir = current / "partners"
+                # 当前就是 npy skill 目录，skills 写在同级目录
+                base_dir = current.parent
+            elif (current / ".claude" / "skills").exists():
+                # 项目有 .claude/skills 目录
+                base_dir = current / ".claude" / "skills"
             elif (current / "SKILL.md").exists():
-                # 当前目录就是 skill 目录
-                base_dir = current / "partners"
+                # 当前目录是某个 skill 目录
+                base_dir = current.parent
             else:
-                # 默认使用 ./partners
-                base_dir = Path("./partners")
+                # 默认使用项目内的 .claude/skills 目录
+                base_dir = current / ".claude" / "skills"
 
     print(f"[DEBUG] base_dir: {base_dir}", file=sys.stderr)
 
