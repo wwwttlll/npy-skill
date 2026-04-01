@@ -27,7 +27,7 @@ from typing import Optional
 
 SKILL_MD_TEMPLATE = """\
 ---
-name: npy_{slug}
+name: {slug}
 description: {name}，{identity} — 你的理想伴侣
 user-invocable: true
 ---
@@ -124,8 +124,18 @@ def create_npy_skill(
     meta: dict,
     persona_content: str,
     relationship_content: str = "",
+    symlink_to_global: bool = True,
 ) -> Path:
-    """创建新的 npy Skill 目录结构"""
+    """创建新的 npy Skill 目录结构
+
+    Args:
+        base_dir: partners 目录路径
+        slug: TA 的唯一标识
+        meta: 元数据
+        persona_content: persona.md 内容
+        relationship_content: relationship.md 内容
+        symlink_to_global: 是否创建符号链接到全局 skills 目录
+    """
 
     skill_dir = base_dir / slug
     skill_dir.mkdir(parents=True, exist_ok=True)
@@ -167,6 +177,27 @@ def create_npy_skill(
         json.dumps(meta, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+
+    # 创建符号链接到全局 skills 目录，让 Claude Code 能识别
+    if symlink_to_global:
+        global_skills_dir = Path.home() / ".claude" / "skills"
+        global_skill_link = global_skills_dir / slug
+
+        # 如果链接已存在，先删除
+        if global_skill_link.exists() or global_skill_link.is_symlink():
+            if global_skill_link.is_symlink():
+                global_skill_link.unlink()
+            else:
+                shutil.rmtree(global_skill_link)
+
+        # 创建符号链接
+        try:
+            global_skill_link.symlink_to(skill_dir)
+            meta["_global_link"] = str(global_skill_link)
+        except OSError as e:
+            # 可能没有权限或跨文件系统，忽略错误
+            print(f"提示：无法创建全局链接：{e}", file=__import__("sys").stderr)
+            print(f"请在项目目录下使用，或手动复制 skill 到全局目录", file=__import__("sys").stderr)
 
     return skill_dir
 
@@ -280,12 +311,42 @@ def update_npy_skill(
     return new_version
 
 
-def delete_npy_skill(skill_dir: Path) -> bool:
-    """删除 npy Skill"""
-    if skill_dir.exists():
-        shutil.rmtree(skill_dir)
-        return True
-    return False
+def delete_npy_skill(skill_dir: Path, cleanup_global_link: bool = True) -> bool:
+    """删除 npy Skill
+
+    Args:
+        skill_dir: skill 目录路径
+        cleanup_global_link: 是否同时删除全局链接
+    """
+    if not skill_dir.exists():
+        return False
+
+    # 读取 meta 获取 slug
+    meta_path = skill_dir / "meta.json"
+    slug = skill_dir.name
+    if meta_path.exists():
+        try:
+            meta = json.loads(meta_path.read_text(encoding="utf-8"))
+            slug = meta.get("slug", slug)
+        except Exception:
+            pass
+
+    # 删除目录
+    shutil.rmtree(skill_dir)
+
+    # 删除全局链接
+    if cleanup_global_link:
+        global_skill_link = Path.home() / ".claude" / "skills" / slug
+        if global_skill_link.is_symlink() or global_skill_link.exists():
+            try:
+                if global_skill_link.is_symlink():
+                    global_skill_link.unlink()
+                else:
+                    shutil.rmtree(global_skill_link)
+            except OSError:
+                pass
+
+    return True
 
 
 def list_npys(base_dir: Path) -> list:
@@ -318,6 +379,69 @@ def list_npys(base_dir: Path) -> list:
     return npys
 
 
+def get_skills_base_dir() -> Path:
+    """获取 skills 存放的基础目录
+
+    优先级：
+    1. 如果在 .claude/skills/npy 目录下，使用该目录的 partners 子目录
+    2. 如果在项目根目录（有 .claude 文件夹），使用 .claude/skills/partners
+    3. 否则使用全局目录 ~/.claude/skills/partners
+    """
+    import os
+
+    # 检查环境变量
+    skill_dir_env = os.environ.get("CLAUDE_SKILL_DIR", "")
+    if skill_dir_env:
+        return Path(skill_dir_env) / "partners"
+
+    current = Path.cwd()
+
+    # 检查是否已经在 skill 目录中（.claude/skills/npy）
+    if (current / "SKILL.md").exists() and current.name == "npy":
+        # 当前就是 npy skill 目录，partners 在这里
+        return current / "partners"
+
+    # 向上查找 .claude 目录
+    for parent in [current] + list(current.parents):
+        if (parent / ".claude" / "skills").exists():
+            # 找到了项目的 .claude/skills 目录
+            return parent / ".claude" / "skills" / "partners"
+        if (parent / "SKILL.md").exists() and parent.name == "npy":
+            return parent / "partners"
+
+    # 默认使用全局目录
+    global_skills = Path.home() / ".claude" / "skills"
+    if global_skills.exists():
+        return global_skills / "partners"
+
+    # 最后回退到当前目录
+    return Path("./partners")
+
+
+def get_npy_skill_dir() -> Path:
+    """获取 npy skill 本身的目录"""
+    import os
+
+    skill_dir_env = os.environ.get("CLAUDE_SKILL_DIR", "")
+    if skill_dir_env:
+        return Path(skill_dir_env)
+
+    current = Path.cwd()
+
+    # 检查当前是否就是 npy skill 目录
+    if (current / "SKILL.md").exists() and current.name == "npy":
+        return current
+
+    # 向上查找
+    for parent in [current] + list(current.parents):
+        if (parent / ".claude" / "skills" / "npy").exists():
+            return parent / ".claude" / "skills" / "npy"
+        if (parent / "SKILL.md").exists() and parent.name == "npy":
+            return parent
+
+    return current
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="npy Skill 文件写入器")
     parser.add_argument("--action", required=True, choices=["create", "update", "list", "delete"])
@@ -332,12 +456,34 @@ def main() -> None:
     parser.add_argument("--moment", help="moment JSON 字符串")
     parser.add_argument(
         "--base-dir",
-        default="./partners",
-        help="npy Skill 根目录（默认：./partners）",
+        default="",
+        help="npy Skill 根目录（默认：.claude/skills/partners/）",
     )
     args = parser.parse_args()
 
-    base_dir = Path(args.base_dir).expanduser()
+    base_dir = Path(args.base_dir).expanduser() if args.base_dir else None
+
+    # 如果没有指定 base_dir，尝试自动检测
+    if not base_dir:
+        # 检查环境变量 CLAUDE_SKILL_DIR
+        import os
+        skill_dir_env = os.environ.get("CLAUDE_SKILL_DIR", "")
+        if skill_dir_env:
+            base_dir = Path(skill_dir_env) / "partners"
+        else:
+            # 尝试检测当前是否在 skill 目录中
+            current = Path.cwd()
+            # 检查是否在 .claude/skills/npy 目录
+            if (current.name == "npy" and (current.parent.name == "skills")):
+                base_dir = current / "partners"
+            elif (current / "SKILL.md").exists():
+                # 当前目录就是 skill 目录
+                base_dir = current / "partners"
+            else:
+                # 默认使用 ./partners
+                base_dir = Path("./partners")
+
+    print(f"[DEBUG] base_dir: {base_dir}", file=sys.stderr)
 
     if args.action == "list":
         npys = list_npys(base_dir)

@@ -11,6 +11,25 @@ user-invocable: true
 
 ---
 
+## 工具使用规则
+
+本 Skill 运行在 Claude Code 环境，使用以下工具：
+
+| 任务 | 使用工具 |
+|------|---------|
+| 读取 PDF 文档 | `Read` 工具（原生支持 PDF） |
+| 读取图片截图 | `Read` 工具（原生支持图片） |
+| 读取 MD/TXT 文件 | `Read` 工具 |
+| 微信数据库解密 | `Bash` → `python3 ${CLAUDE_SKILL_DIR}/tools/wechat_decryptor.py` |
+| 聊天记录解析 | `Bash` → `python3 ${CLAUDE_SKILL_DIR}/tools/chat_parser.py` |
+| 创建 Skill 文件 | `Write` / `Bash` 工具 |
+| 更新 Skill 文件 | `Edit` 工具 |
+| 列出已有 Skill | `Bash` → `python3 ${CLAUDE_SKILL_DIR}/tools/skill_writer.py --action list` |
+
+**基础目录**：Skill 文件写入 `.claude/skills/{slug}/`（相对于本项目目录）或全局目录 `~/.claude/skills/{slug}/`。
+
+---
+
 ## 管理命令
 
 | 命令 | 说明 |
@@ -223,21 +242,20 @@ TA：[按 Persona 回复]
 
 ## Step 5：写入文件
 
-用户确认后：
+用户确认后，创建 TA 的 Skill 文件。
 
-```bash
-python tools/skill_writer.py --action create \
---slug {slug} \
---meta meta.json \
---persona persona.md \
---relationship relationship.md \
---base-dir ./partners
+**重要**：每个创建的 TA 都是一个独立的 Skill，需要放在 Claude Code 能识别的位置。
+
+### 写入位置
+
+优先级：
+1. 如果存在项目的 `.claude/skills/` 目录，写入该目录
+2. 否则写入全局的 `~/.claude/skills/` 目录
+
+### 目录结构
+
 ```
-
-创建目录结构：
-
-```
-partners/{slug}/
+.claude/skills/{slug}/
 ├── SKILL.md          # 完整 Persona，触发词 /{slug}
 ├── persona.md        # 人格核心
 ├── relationship.md   # 关系记忆与默契
@@ -248,20 +266,34 @@ partners/{slug}/
     └── moments/      # 重要时刻记录
 ```
 
+### 执行写入
+
+使用 Write 工具创建文件：
+
+```bash
+# 创建目录结构
+mkdir -p .claude/skills/{slug}/versions
+mkdir -p .claude/skills/{slug}/knowledge/chats
+mkdir -p .claude/skills/{slug}/knowledge/moments
+```
+
+然后写入各文件：
+- `Write .claude/skills/{slug}/SKILL.md`
+- `Write .claude/skills/{slug}/persona.md`
+- `Write .claude/skills/{slug}/relationship.md`
+- `Write .claude/skills/{slug}/meta.json`
+
 完成后告知用户：
 
 ```
 ✅ 已创建：/{slug}
 
-现在你可以直接用 /{slug} 和TA对话。
-TA会用TA的方式关心你、陪伴你、让你感受到被爱。
-
-后续操作：
-和TA对话：直接说 /{slug}
-调整TA：说"我希望TA更..."或"TA不会这样..."
-记录时刻：说"记录一下今天..."
-查看所有：说 /list-npys
-说再见：说 /move-on {slug}
+现在你可以：
+- 和TA对话：直接说 /{slug}
+- 调整TA：说"我希望TA更..."或"TA不会这样..."
+- 记录时刻：说"记录一下今天..."
+- 查看所有：说 /list-npys
+- 说再见：说 /move-on {slug}
 ```
 
 ---
