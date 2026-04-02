@@ -300,22 +300,34 @@ mkdir -p .claude/skills/{slug}/knowledge/moments
 
 ## `/list-npys` 命令
 
-收到 `/list-npys` 时：
+收到 `/list-npys` 时，列出 `.claude/skills/` 目录下所有已创建的 TA：
+
+使用 Bash 工具：
 
 ```bash
-python tools/skill_writer.py --action list --base-dir ./partners
+ls -d .claude/skills/*/ 2>/dev/null | grep -v npy | xargs -I {} basename {} | while read slug; do
+  if [ -f ".claude/skills/$slug/meta.json" ]; then
+    name=$(cat ".claude/skills/$slug/meta.json" | grep -o '"name"[^,]*' | cut -d'"' -f4)
+    echo "[$slug] $name"
+  fi
+done
 ```
+
+或使用 Glob 工具：
+
+```
+Glob .claude/skills/*/SKILL.md
+```
+
+然后读取每个 meta.json 获取详细信息。
 
 输出格式：
 
 ```
-已创建 {n} 个 npy Skill：
+已创建 {n} 个 TA：
 
+[xiaoxue] 小雪 — 18岁女大学生 温柔体贴
 [xiaobai] 小白 — 女 25岁 稳定期
-  版本: v2 调整次数: 1 重要时刻: 3 更新: 2024-01-20
-
-[ahao] 阿豪 — 男 28岁 热恋期
-  版本: v1 调整次数: 0 重要时刻: 1 更新: 2024-01-18
 
 ---
 和TA对话：/{slug}
@@ -336,7 +348,10 @@ python tools/skill_writer.py --action list --base-dir ./partners
 用户确认后：
 
 ```bash
-rm -rf partners/{slug}
+rm -rf .claude/skills/{slug}
+# 同时删除全局链接
+rm -f ~/.claude/skills/{slug}
+rm -f ~/.openclaw/workspace/skills/{slug}
 ```
 
 输出：
