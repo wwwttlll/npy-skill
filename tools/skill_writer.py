@@ -6,14 +6,14 @@ npy Skill 文件写入器
 
 用法：
 python skill_writer.py --action create --slug xiaoming --meta meta.json \
---persona persona_content.md --relationship relationship.md --base-dir ./partners
+--persona persona_content.md --relationship relationship.md
 
 python skill_writer.py --action update --slug xiaoming \
---adjustment '{"name": "...", "content": "...", "user_note": "..."}' --base-dir ./partners
+--adjustment '{"name": "...", "content": "...", "user_note": "..."}'
 
-python skill_writer.py --action list --base-dir ./partners
+python skill_writer.py --action list
 
-python skill_writer.py --action delete --slug xiaoming --base-dir ./partners
+python skill_writer.py --action delete --slug xiaoming
 """
 
 from __future__ import annotations
@@ -129,7 +129,7 @@ def create_npy_skill(
     """创建新的 npy Skill 目录结构
 
     Args:
-        base_dir: partners 目录路径
+        base_dir: skills 目录路径（.claude/skills/）
         slug: TA 的唯一标识
         meta: 元数据
         persona_content: persona.md 内容
@@ -545,7 +545,7 @@ def main() -> None:
     parser.add_argument(
         "--base-dir",
         default="",
-        help="npy Skill 根目录（默认：.claude/skills/partners/）",
+        help="npy Skill 根目录（默认：.claude/skills/）",
     )
     args = parser.parse_args()
 

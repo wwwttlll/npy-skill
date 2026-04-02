@@ -276,7 +276,8 @@ npy-skill/
 │   ├── version_manager.py  #   版本存档与回滚
 │   ├── wechat_decryptor.py #   微信数据库解密
 │   └── chat_parser.py      #   聊天记录解析
-├── partners/               # 生成的 npy Skill（gitignored）
+├── partners/               # 示例模板（参考用，非实际运行目录）
+│   └── example_ta/         #   示例 TA 结构模板
 ├── docs/PRD.md
 ├── requirements.txt
 └── LICENSE
