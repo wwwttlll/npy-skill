@@ -545,7 +545,7 @@ def main() -> None:
     parser.add_argument(
         "--base-dir",
         default="",
-        help="npy Skill 根目录（默认：.claude/skills/partners/）",
+        help="npy Skill 根目录（默认：.claude/skills/）",
     )
     args = parser.parse_args()
 
