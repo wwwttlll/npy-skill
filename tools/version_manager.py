@@ -4,9 +4,9 @@
 负责版本存档、历史查看和回滚操作。
 
 用法：
-python version_manager.py --action list --slug xiaoming --base-dir ./partners
-python version_manager.py --action save --slug xiaoming --note "添加温柔特质" --base-dir ./partners
-python version_manager.py --action rollback --slug xiaoming --version v2 --base-dir ./partners
+python version_manager.py --action list --slug xiaoming
+python version_manager.py --action save --slug xiaoming --note "添加温柔特质"
+python version_manager.py --action rollback --slug xiaoming --version v2
 """
 
 from __future__ import annotations
@@ -123,12 +123,26 @@ def main() -> None:
     parser.add_argument("--note", help="版本说明（用于 save）")
     parser.add_argument(
         "--base-dir",
-        default="./partners",
-        help="伴侣 Skill 根目录（默认：./partners）",
+        default="",
+        help="npy Skill 根目录（默认：.claude/skills/）",
     )
     args = parser.parse_args()
 
-    base_dir = Path(args.base_dir).expanduser()
+    # 如果没有指定 base_dir，尝试自动检测
+    if args.base_dir:
+        base_dir = Path(args.base_dir).expanduser()
+    else:
+        current = Path.cwd()
+        # 检查是否在 .claude/skills/npy 目录
+        if (current.name == "npy" and (current.parent.name == "skills")):
+            base_dir = current.parent
+        elif (current / ".claude" / "skills").exists():
+            base_dir = current / ".claude" / "skills"
+        elif (current / "SKILL.md").exists():
+            # 当前目录是某个 skill 目录
+            base_dir = current.parent
+        else:
+            base_dir = current / ".claude" / "skills"
 
     if not args.slug:
         print("错误：需要 --slug 参数", file=sys.stderr)

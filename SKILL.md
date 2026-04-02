@@ -495,9 +495,4 @@ TA不是完美的，TA有自己的：
 | `tools/version_manager.py` | 版本存档与回滚 |
 | `tools/wechat_decryptor.py` | 微信数据库解密（Windows/macOS） |
 | `tools/chat_parser.py` | 聊天记录解析（微信/iMessage/文本） |
-| `partners/example_ta/` | 示例 npy |
-| `prompts/correction_handler.md` | 调整TA特质处理 |
-| `prompts/merger.md` | 增量更新逻辑 |
-| `tools/skill_writer.py` | 写入/更新 Skill 文件 |
-| `tools/version_manager.py` | 版本存档与回滚 |
-| `partners/example_ta/` | 示例 npy |
+| `partners/example_ta/` | 示例 TA 结构模板 |
