@@ -163,9 +163,6 @@ pip3 install -r requirements.txt
 | `/list-npys` | 列出所有已创建的TA |
 | `/{slug}` | 和指定的TA对话 |
 | `/move-on {slug}` | 删除一个TA（说再见） |
-| `/{slug}-mode:teasing` | 撒娇/暧昧模式 |
-| `/{slug}-mode:serious` | 认真谈心模式 |
-| `/{slug}-mode:support` | 情绪支持模式 |
 
 ### 聊天记录导入
 
